@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "lib": ["esnext"],
-    "typeRoots": ["./node_modules/@types", "./src/types"], // 优先识别src/types下的类型
+    "typeRoots": ["./src/types", "./node_modules/@types"], // 优先识别src/types下的类型
     "types": []
   },
   "include": ["src/**/*"],

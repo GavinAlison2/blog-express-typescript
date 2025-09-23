@@ -3,15 +3,6 @@ import { AuthService } from "../services/auth.service";
 import { JwtPayload, Role } from "../types";
 import { JwtUtils } from "../utils/jwt.utils";
 
-// 扩展Request接口以包含用户信息
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user?: JwtPayload;
-//     }
-//   }
-// }
-
 export class AuthMiddleware {
   private authService: AuthService;
 

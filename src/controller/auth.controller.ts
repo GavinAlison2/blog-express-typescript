@@ -3,28 +3,6 @@ import { AuthService } from "../services/auth.service";
 import { RegisterRequest, LoginRequest } from "../types";
 // import {} from "../type/express.d";
 
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user?: {
-//         userId: string;
-//         username: string;
-//         email: string;
-//         role: string;
-//       };
-//       session: {
-//         user?: {
-//           userId: number;
-//           username: string;
-//           email: string;
-//           role: string;
-//         };
-//         save: (callback: (err: any) => void) => void;
-//         destroy: (callback: (err: any) => void) => void;
-//       };
-//     }
-//   }
-// }
 
 export class AuthController {
   private authService: AuthService;
