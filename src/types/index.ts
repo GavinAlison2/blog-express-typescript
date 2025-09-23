@@ -30,8 +30,9 @@ export interface LoginRequest {
 
 // JWT payload接口
 export interface JwtPayload {
-  userId: string;
+  userId: number | string;
   username: string;
   email: string;
   role: Role;
 }
+

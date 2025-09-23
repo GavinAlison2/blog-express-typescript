@@ -2,7 +2,8 @@
 import { BcryptUtil } from "../utils/bcrypt.utils";
 // import jwt from "jsonwebtoken";
 import { JwtUtils } from "../utils/jwt.utils";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import { PrismaClient, users_role } from "../generated/prisma";
 // import { config } from "../config";
 import { RegisterRequest, LoginRequest, JwtPayload, Role } from "../types";
 
@@ -40,7 +41,8 @@ export class AuthService {
         username: data.username,
         email: data.email,
         password: hashedPassword,
-        role: Role.USER,
+        role: users_role.user,
+        // role: Role.USER,
       },
     });
   }
@@ -72,8 +74,9 @@ export class AuthService {
     // 生成JWT令牌
     const token = JwtUtils.generateToken({
       userId: user.id,
+      username: user.username,
       email: user.email,
-      role: user.role as Role,
+      role: Role.USER,
     } as JwtPayload);
 
     // 移除密码字段
@@ -90,7 +93,7 @@ export class AuthService {
    */
   async getUserById(id: string): Promise<any | null> {
     return prisma.user.findUnique({
-      where: { id },
+      where: { id: Number(id) },
     });
   }
 }

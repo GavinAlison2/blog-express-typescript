@@ -4,13 +4,13 @@ import { JwtPayload, Role } from "../types";
 import { JwtUtils } from "../utils/jwt.utils";
 
 // 扩展Request接口以包含用户信息
-declare global {
-  namespace Express {
-    interface Request {
-      user?: JwtPayload;
-    }
-  }
-}
+// declare global {
+//   namespace Express {
+//     interface Request {
+//       user?: JwtPayload;
+//     }
+//   }
+// }
 
 export class AuthMiddleware {
   private authService: AuthService;
@@ -40,7 +40,7 @@ export class AuthMiddleware {
       const token = authHeader.split(" ")[1];
 
       // 验证令牌
-      const payload = JwtUtils.verifyToken(token);
+      const payload: JwtPayload = JwtUtils.verifyToken(token);
       req.user = payload;
       // 还需验证一下session id是否一致
       const session_user = req.session.user;
