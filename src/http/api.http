@@ -1,0 +1,45 @@
+get http://localhost:3000/post/1
+### 
+get http://localhost:3000/post/121
+###
+get http://localhost:3000/feed?searchString=prisma&take=2&orderBy=desc
+
+###
+get http://localhost:3000/user/63/drafts
+###
+GET http://localhost:3000/users
+### 
+POST http://localhost:3000/post 
+Content-Type: application/json
+
+{
+    "title": "My New Post",
+    "content": "This is an example post.",
+    "authorEmail": "mahmoud@prisma.io"
+}
+###
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+
+{
+    "email": "ankur@prisma.io",
+    "name": "Ankur Datta",
+    "postData": [
+        {
+        "title": "Hello World",
+        "content": "This is the content of the post"
+        }
+    ]
+}
+### 
+PUT http://localhost:3000/publish/4
+###
+PUT http://localhost:3000/publish/124
+
+### 
+DELETE http://localhost:3000/post/1
+### 
+DELETE http://localhost:3000/post/121
+###
+get http://localhost:3000/post/121
