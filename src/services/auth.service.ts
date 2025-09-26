@@ -1,10 +1,6 @@
-// import bcrypt from "bcryptjs";
 import { BcryptUtil } from "../utils/bcrypt.utils";
-// import jwt from "jsonwebtoken";
 import { JwtUtils } from "../utils/jwt.utils";
-// import { PrismaClient } from "@prisma/client";
-import { PrismaClient, users_role } from "../generated/prisma";
-// import { config } from "../config";
+import { PrismaClient, Prisma, users_role } from "../generated/prisma";
 import { RegisterRequest, LoginRequest, JwtPayload, Role } from "../types";
 
 const prisma = new PrismaClient({ log: ["query", "info", "warn", "error"] });
@@ -54,8 +50,17 @@ export class AuthService {
     data: LoginRequest
   ): Promise<{ user: Omit<any, "password">; token: string }> {
     // 查找用户
-    const user = await prisma.user.findUnique({
-      where: { email: data.email },
+    const { username, email } = data;
+    const where: Prisma.userWhereInput = {};
+    if (email) where.email = email;
+    if (username) where.username = username;
+    // 两者只能存在一个, 默认使用username
+    // if (where.email && where.username) {
+    //   where.email = null;
+    // }
+
+    const user = await prisma.user.findFirst({
+      where,
     });
 
     if (!user) {

@@ -1,0 +1,601 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>像塑 - AI特效创作平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#165DFF",
+              secondary: "#36CFC9",
+              accent: "#722ED1",
+              dark: "#121212",
+              "dark-light": "#1E1E1E",
+              "dark-lighter": "#2D2D2D",
+              "text-primary": "#FFFFFF",
+              "text-secondary": "#86909C",
+            },
+            fontFamily: {
+              inter: ["Inter", "system-ui", "sans-serif"],
+            },
+            animation: {
+              "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .scrollbar-hide {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .text-shadow {
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .hover-scale {
+          transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+          transform: scale(1.03);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-dark font-inter text-text-primary min-h-screen flex overflow-hidden"
+  >
+    <!-- 侧边导航 -->
+    <aside
+      class="w-16 md:w-64 bg-dark-light h-screen flex flex-col transition-all duration-300 z-20"
+    >
+      <div
+        class="p-4 flex items-center justify-center md:justify-start border-b border-dark-lighter"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center"
+        >
+          <i class="fa fa-magic text-white text-xl"></i>
+        </div>
+        <span class="ml-3 text-lg font-semibold hidden md:block">像塑</span>
+        <span class="ml-auto text-xs text-text-secondary hidden md:block"
+          >v4.4.1</span
+        >
+      </div>
+
+      <div class="mt-6 px-2 flex-1 overflow-y-auto scrollbar-hide">
+        <div class="flex flex-col items-center md:items-start space-y-1">
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer bg-primary/10 text-primary"
+          >
+            <i class="fa fa-home text-xl"></i>
+            <span class="ml-3 hidden md:block">主页</span>
+          </div>
+
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer hover:bg-dark-lighter transition-colors"
+          >
+            <i class="fa fa-folder-open text-xl text-text-secondary"></i>
+            <span class="ml-3 hidden md:block text-text-secondary"
+              >我的项目</span
+            >
+          </div>
+
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer hover:bg-dark-lighter transition-colors"
+          >
+            <i class="fa fa-image text-xl text-text-secondary"></i>
+            <span class="ml-3 hidden md:block text-text-secondary"
+              >上传表情包</span
+            >
+          </div>
+
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer hover:bg-dark-lighter transition-colors"
+          >
+            <i class="fa fa-play-circle text-xl text-text-secondary"></i>
+            <span class="ml-3 hidden md:block text-text-secondary"
+              >在线教程</span
+            >
+          </div>
+        </div>
+
+        <div class="mt-8 px-2">
+          <div
+            class="flex items-center justify-center md:justify-start md:px-4 mb-2"
+          >
+            <span class="text-xs text-text-secondary hidden md:block"
+              >用户信息</span
+            >
+          </div>
+
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer hover:bg-dark-lighter transition-colors"
+          >
+            <img
+              src="https://picsum.photos/id/64/200"
+              alt="用户头像"
+              class="w-8 h-8 rounded-full object-cover"
+            />
+            <span class="ml-3 hidden md:block text-text-secondary"
+              >腹肌胖人</span
+            >
+          </div>
+
+          <div
+            class="w-full h-12 rounded-lg flex items-center justify-center md:justify-start md:px-4 cursor-pointer hover:bg-dark-lighter transition-colors"
+          >
+            <i class="fa fa-star text-xl text-text-secondary"></i>
+            <span class="ml-3 hidden md:block text-text-secondary"
+              >能力特权</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-dark-lighter">
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+        >
+          <i class="fa fa-plus mr-2"></i>
+          <span>新建项目</span>
+        </button>
+
+        <button
+          class="w-full mt-3 bg-dark-lighter hover:bg-dark-lighter/80 text-text-secondary py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+        >
+          <i class="fa fa-folder-open mr-2"></i>
+          <span>打开项目</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <!-- 顶部公告栏 -->
+      <div
+        class="bg-gradient-to-r from-accent to-primary p-4 relative overflow-hidden"
+      >
+        <div class="absolute inset-0 opacity-20">
+          <div
+            class="absolute w-64 h-64 rounded-full bg-white/30 blur-3xl -top-32 -right-32"
+          ></div>
+          <div
+            class="absolute w-96 h-96 rounded-full bg-white/20 blur-3xl bottom-0 -left-48"
+          ></div>
+        </div>
+
+        <div
+          class="container mx-auto flex flex-col md:flex-row items-center justify-between relative z-10"
+        >
+          <div>
+            <h2 class="text-[clamp(1.2rem,3vw,1.8rem)] font-bold text-shadow">
+              新能力「云端数据库」
+            </h2>
+            <p class="text-white/80 mt-1">
+              记忆用户使用数据，制作打卡/投票等全新玩法
+            </p>
+          </div>
+
+          <div class="mt-4 md:mt-0 flex items-center">
+            <button
+              class="bg-white text-accent px-4 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors flex items-center"
+            >
+              去看看
+              <i class="fa fa-arrow-right ml-2"></i>
+            </button>
+
+            <div class="flex ml-6 space-x-2">
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+              <span class="w-2 h-2 rounded-full bg-white/50"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 任务活动区 -->
+      <div class="bg-dark-light p-4 md:p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">任务活动 (15)</h3>
+          <div class="flex items-center">
+            <span class="text-sm text-text-secondary">1/5</span>
+            <button class="ml-4 text-text-secondary hover:text-text-primary">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex overflow-x-auto scrollbar-hide space-x-4 pb-2">
+          <!-- 任务卡片1 -->
+          <div class="bg-dark-lighter rounded-xl p-4 min-w-[280px] hover-scale">
+            <div class="flex items-start">
+              <img
+                src="https://picsum.photos/id/237/60"
+                alt="AI特效竞赛"
+                class="w-10 h-10 rounded-lg object-cover"
+              />
+              <div class="ml-3 flex-1">
+                <h4 class="font-medium">AI特效竞赛</h4>
+                <p class="text-sm text-text-secondary mt-1">5天后结束</p>
+              </div>
+            </div>
+            <button
+              class="mt-4 w-full bg-primary/20 hover:bg-primary/30 text-primary py-2 rounded-lg text-sm transition-colors"
+            >
+              领取
+            </button>
+          </div>
+
+          <!-- 任务卡片2 -->
+          <div class="bg-dark-lighter rounded-xl p-4 min-w-[280px] hover-scale">
+            <div class="flex items-start">
+              <img
+                src="https://picsum.photos/id/177/60"
+                alt="解锁特权"
+                class="w-10 h-10 rounded-lg object-cover"
+              />
+              <div class="ml-3 flex-1">
+                <h4 class="font-medium">解锁打卡特效创作权限</h4>
+                <p class="text-sm text-text-secondary mt-1">
+                  全新能力 | 10月15日结束
+                </p>
+              </div>
+            </div>
+            <button
+              class="mt-4 w-full bg-primary/20 hover:bg-primary/30 text-primary py-2 rounded-lg text-sm transition-colors"
+            >
+              领取
+            </button>
+          </div>
+
+          <!-- 任务卡片3 -->
+          <div class="bg-dark-lighter rounded-xl p-4 min-w-[280px] hover-scale">
+            <div class="flex items-start">
+              <img
+                src="https://picsum.photos/id/129/60"
+                alt="征集活动"
+                class="w-10 h-10 rounded-lg object-cover"
+              />
+              <div class="ml-3 flex-1">
+                <h4 class="font-medium">AI创意玩法模板征集</h4>
+                <p class="text-sm text-text-secondary mt-1">
+                  模板展示 | 21天后结束
+                </p>
+              </div>
+            </div>
+            <button
+              class="mt-4 w-full bg-accent/20 hover:bg-accent/30 text-accent py-2 rounded-lg text-sm transition-colors"
+            >
+              去完成
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目展示区 -->
+      <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-dark">
+        <!-- 分类导航 -->
+        <div class="flex flex-wrap items-center justify-between mb-6">
+          <div class="flex flex-wrap gap-2 mb-4 md:mb-0">
+            <span class="px-3 py-1 rounded-full bg-primary text-white text-sm"
+              >全部工程</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >新手必做</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >AI玩法</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >游戏</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >美妆</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >趣味扮演</span
+            >
+            <span
+              class="px-3 py-1 rounded-full bg-dark-lighter text-text-secondary text-sm hover:bg-dark-lighter/80 cursor-pointer transition-colors"
+              >更多</span
+            >
+          </div>
+
+          <div class="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="输入工程名称"
+              class="w-full bg-dark-lighter border border-dark-lighter rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-primary transition-colors"
+            />
+            <i
+              class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary"
+            ></i>
+          </div>
+        </div>
+
+        <!-- 项目网格 -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+        >
+          <!-- 项目卡片1 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/b20b8ecfe303473e94c8cf227206823c.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025092417374174EDECA78DC6C310BEE1&amp;rk3s=8e244e95&amp;rrcfp=8a172a1a&amp;x-expires=1759311462&amp;x-signature=40LobrgWnB6rZQG%2B7UoM9xwhj1c%3D"
+                alt="命运之轮 - 多人脸特效"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-primary/80 text-white text-xs px-2 py-1 rounded-full"
+                      >多人脸</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">命运之轮</h4>
+          </div>
+
+          <!-- 项目卡片2 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://p26-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/48516278b18244738d626abd4832df56.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025092417383448BE96CC6451021513BC&amp;rk3s=8e244e95&amp;rrcfp=8a172a1a&amp;x-expires=1759311514&amp;x-signature=txi7YU6XAm76X8nRm4hc%2BIuNn6c%3D"
+                alt="颜值排名 - 游戏特效"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-accent/80 text-white text-xs px-2 py-1 rounded-full"
+                      >游戏</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">我的全国颜值排名</h4>
+            <p class="text-xs text-text-secondary mt-1">拍摄一周前 · 鑫鑫</p>
+          </div>
+
+          <!-- 项目卡片3 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/5bb1e9205ac04caa9afd6f012867438a.png~tplv-a9rns2rl98-24:720:720.png?rcl=2025092421574905671F87842D5734ECF2&amp;rk3s=8e244e95&amp;rrcfp=8a172a1a&amp;x-expires=1759327070&amp;x-signature=sZ5c6%2FUVSEjoB13ZdnK26nx9RiU%3D"
+                alt="小王子 - AI换脸"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-secondary/80 text-white text-xs px-2 py-1 rounded-full"
+                      >AI换脸</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">小王子</h4>
+          </div>
+
+          <!-- 项目卡片4 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://picsum.photos/id/235/400"
+                alt="黑神话悟空 - 扮演特效"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-accent/80 text-white text-xs px-2 py-1 rounded-full"
+                      >扮演</span
+                    >
+                    <span
+                      class="bg-dark-lighter text-text-secondary text-xs px-2 py-1 rounded-full ml-1"
+                      >西游记</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">黑神话悟空</h4>
+          </div>
+
+          <!-- 项目卡片5 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://picsum.photos/id/183/400"
+                alt="空中飞车 - 游戏特效"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-primary/80 text-white text-xs px-2 py-1 rounded-full"
+                      >游戏</span
+                    >
+                    <span
+                      class="bg-dark-lighter text-text-secondary text-xs px-2 py-1 rounded-full ml-1"
+                      >赛车</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">空中飞车</h4>
+          </div>
+
+          <!-- 项目卡片6 -->
+          <div class="group cursor-pointer">
+            <div class="relative rounded-xl overflow-hidden hover-scale">
+              <img
+                src="https://picsum.photos/id/122/400"
+                alt="AI树叶画 - AI特效"
+                class="w-full aspect-square object-cover"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+              >
+                <div>
+                  <div class="flex items-center">
+                    <span
+                      class="bg-secondary/80 text-white text-xs px-2 py-1 rounded-full"
+                      >AI效果</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">AI树叶画</h4>
+          </div>
+
+          <!-- 项目卡片7-12 -->
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/1012/400"
+                alt="发型特效1"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">时尚发型</h4>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/1027/400"
+                alt="发型特效2"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">潮流短发</h4>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/1062/400"
+                alt="发型特效3"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">复古波浪</h4>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/1074/400"
+                alt="发型特效4"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">自然卷发</h4>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/1083/400"
+                alt="发型特效5"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">朋克造型</h4>
+          </div>
+
+          <div class="group cursor-pointer">
+            <div
+              class="relative rounded-xl overflow-hidden hover-scale bg-dark-lighter flex items-center justify-center"
+            >
+              <img
+                src="https://picsum.photos/id/177/400"
+                alt="发型特效6"
+                class="w-full aspect-square object-cover"
+              />
+            </div>
+            <h4 class="font-medium mt-2 line-clamp-1">优雅盘发</h4>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // 简单的交互效果增强
+      document.addEventListener("DOMContentLoaded", () => {
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute("href")).scrollIntoView({
+              behavior: "smooth",
+            });
+          });
+        });
+
+        // 为项目卡片添加加载动画
+        const projectCards = document.querySelectorAll(".group");
+        projectCards.forEach((card, index) => {
+          setTimeout(() => {
+            card.classList.add("opacity-100");
+            card.classList.remove("opacity-0", "translate-y-4");
+          }, 100 * index);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+get http://localhost:3000/auth/me
+###
+get http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE3LCJ1c2VybmFtZSI6Im1pY3MiLCJlbWFpbCI6Im1pY3NAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTg4MjEwMzQsImV4cCI6MTc1ODkwNzQzNH0.OnvCDdlBzFj2YyKCSZIswwRicrorr2lX8rOa83c-O6s
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "mics",
+    "password": "123456"
+}
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin123"
+}
+###
+post http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "mics2@gmail.com",
+    "username": "mics2",
+    "password": "123456"
+
+}
+###
+get http://localhost:3000/auth/logout
+###
+get http://localhost:3000/err
+###
+get http://localhost:3000/async-error
+###
+get http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTg4NDYzMTAsImV4cCI6MTc1ODkzMjcxMH0.RXLO1-NVXL-VcxRdJXgzGC1uVroXtx3MnbXNAeePrA8
+###
+get http://localhost:3000/user/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTg4NDYzMTAsImV4cCI6MTc1ODkzMjcxMH0.RXLO1-NVXL-VcxRdJXgzGC1uVroXtx3MnbXNAeePrA8
+
+### 
+put http://localhost:3000/user/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTg4NDYzMTAsImV4cCI6MTc1ODkzMjcxMH0.RXLO1-NVXL-VcxRdJXgzGC1uVroXtx3MnbXNAeePrA8
+Content-Type: application/json
+
+{
+    "bio": "I am a new bio"
+}

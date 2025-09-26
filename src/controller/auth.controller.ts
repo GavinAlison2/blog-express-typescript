@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
-import { RegisterRequest, LoginRequest } from "../types";
-// import {} from "../type/express.d";
-
+import { RegisterRequest, LoginRequest } from "../types/index";
 
 export class AuthController {
   private authService: AuthService;
@@ -64,11 +62,13 @@ export class AuthController {
       const data: LoginRequest = req.body;
 
       // 验证请求数据
-      if (!data.email || !data.password) {
+      if (
+        !((data.email && data.password) || (data.username && data.password))
+      ) {
         return res.status(400).json({
           code: 400,
           success: false,
-          message: "Email and password are required",
+          message: "Email and password or username are required",
           data: null,
         });
       }
@@ -84,7 +84,7 @@ export class AuthController {
         role: user.role,
       };
       req.session.user = userSessionData;
-
+      // console.log("----------");
       req.session.save((err) => {
         if (err) {
           console.error("Failed to save session:", err);
@@ -97,14 +97,13 @@ export class AuthController {
         }
 
         // 登录成功响应
+        res.header("Authorization", `Bearer ${token}`);
         return res.status(200).json({
           code: 200,
           success: true,
           message: "Login successful",
           token,
-          data: {
-            user: userSessionData,
-          },
+          data: userSessionData,
         });
       });
     } catch (error) {
@@ -140,7 +139,7 @@ export class AuthController {
         });
       }
       // 如果session中没有，再从JWT验证的用户信息获取
-      if (!req.user) {
+      if (!req?.user) {
         return res.status(401).json({
           code: 401,
           success: false,
@@ -181,16 +180,19 @@ export class AuthController {
   /**
    * 用户登出 - 销毁session
    */
-  logout = (req: Request, res: Response) => {
+  logout = async (req: Request, res: Response) => {
+    req.session.user = undefined;
     req.session.destroy((err) => {
-      req.session.user = undefined;
       if (err) {
-        return res.status(500).json({
-          code: 500,
-          success: false,
-          message: "Failed to logout",
-          data: null,
-        });
+        return res
+          .status(500)
+          .json({
+            code: 500,
+            success: false,
+            message: "Failed to logout",
+            data: null,
+          })
+          .end();
       }
 
       res.status(200).json({

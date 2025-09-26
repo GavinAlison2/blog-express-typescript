@@ -24,15 +24,15 @@ export interface RegisterRequest {
 
 // 登录请求接口
 export interface LoginRequest {
+  username: string;
   email: string;
   password: string;
 }
 
 // JWT payload接口
 export interface JwtPayload {
-  userId: number | string;
+  userId: number;
   username: string;
   email: string;
   role: Role;
 }
-

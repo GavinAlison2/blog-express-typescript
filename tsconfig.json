@@ -12,8 +12,8 @@
     "resolveJsonModule": true,
     "lib": ["esnext"],
     "typeRoots": ["./src/types", "./node_modules/@types"], // 优先识别src/types下的类型
-    "types": []
+    "types": ["express", "express-session"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts", "test/**/*"]
+  "exclude": ["node_modules", "**/*.test.ts", "test/**/*", "dist"]
 }

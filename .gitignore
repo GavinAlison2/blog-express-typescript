@@ -4,6 +4,7 @@ dist/
 *.db
 **/**/*.db
 
-/src/generated/prisma
+/src/generated/prisma/
 package-lock.json
 .vscode/
+.cursor/

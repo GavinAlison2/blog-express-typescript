@@ -1,6 +1,9 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+// import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from "../generated/prisma";
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient({
+  log: ["query", "info", "warn", "error"],
+});
 
 export class PrismaSqlUtils {
   /**
@@ -228,7 +231,7 @@ export class PrismaSqlUtils {
   // 使用示例（注意用 ? 作为占位符）
   public async testRawQueries() {
     // 1. 查询示例
-    const users = await this.executeRawQuery<Prisma.UserSelect>(
+    const users = await this.executeRawQuery<Prisma.userSelect>(
       "SELECT * FROM User WHERE id BETWEEN ? AND ?", // 使用 ? 作为占位符
       [1, 10]
     );
@@ -244,33 +247,33 @@ export class PrismaSqlUtils {
   // 使用示例
   public async testAllScenarios() {
     // 1. 查询多条记录 - 不带参数
-    const allUsers = await this.queryMany<Prisma.UserSelect>(
+    const allUsers = await this.queryMany<Prisma.userSelect>(
       "SELECT id, name, email FROM User ORDER BY id ASC"
     );
     console.log("所有用户:", allUsers);
 
     // 2. 查询多条记录 - 带数组参数（?占位符）
-    const filteredUsers = await this.queryMany<Prisma.UserSelect>(
+    const filteredUsers = await this.queryMany<Prisma.userSelect>(
       "SELECT id, name FROM User WHERE id BETWEEN ? AND ?",
       [1, 5]
     );
     console.log("ID在1-5之间的用户:", filteredUsers);
 
     // 3. 查询多条记录 - 带命名参数（:name占位符）
-    const namedParamUsers = await this.queryMany<Prisma.UserSelect>(
+    const namedParamUsers = await this.queryMany<Prisma.userSelect>(
       "SELECT id, email FROM User WHERE name LIKE :search",
       { search: "%test%" }
     );
     console.log("名字包含test的用户:", namedParamUsers);
 
     // 4. 查询单条记录 - 不带参数
-    const firstUser = await this.queryOne<Prisma.UserSelect>(
+    const firstUser = await this.queryOne<Prisma.userSelect>(
       "SELECT * FROM User ORDER BY id ASC LIMIT 1"
     );
     console.log("第一个用户:", firstUser);
 
     // 5. 查询单条记录 - 带参数
-    const specificUser = await this.queryOne<Prisma.UserSelect>(
+    const specificUser = await this.queryOne<Prisma.userSelect>(
       "SELECT * FROM User WHERE email = ?",
       ["alice@example.com"]
     );
@@ -309,7 +312,7 @@ export class PrismaSqlUtils {
       ["temp@example.com"]
     );
     console.log(`删除临时用户，影响行数: ${deletedUser}`);
-    const specificUserv2 = await this.queryOne<Prisma.UserSelect>(
+    const specificUserv2 = await this.queryOne<Prisma.userSelect>(
       "SELECT * FROM User WHERE email = ?",
       "alice@example.com"
     );
